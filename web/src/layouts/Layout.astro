@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content="IPv6 Poetry - Convert IPv6 addresses to memorable word sequences for easier communication" />
+		<title>IPv6 Poetry - Human-Friendly IPv6 Addresses</title>
+		<!-- Add Google Fonts -->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Source+Code+Pro&display=swap" rel="stylesheet">
+	</head>
+	<body>
+		<header>
+			<div class="header-content">
+				<h1>IPv6 <span class="highlight">Poetry</span></h1>
+				<nav>
+					<ul>
+						<li><a href="/">Home</a></li>
+						<li><a href="/rfc">RFC Draft</a></li>
+						<li><a href="https://github.com/yourusername/ipv6poetry" target="_blank">GitHub</a></li>
+					</ul>
+				</nav>
+			</div>
+		</header>
+		
+		<main>
+			<slot />
+		</main>
+		
+		<footer>
+			<div class="footer-content">
+				<p>&copy; {new Date().getFullYear()} IPv6 Poetry Project</p>
+			</div>
+		</footer>
+	</body>
+</html>
+
+<style is:global>
+	:root {
+		--primary-color: #4361ee;
+		--secondary-color: #3a0ca3;
+		--accent-color: #7209b7;
+		--text-color: #2b2d42;
+		--light-bg: #f8f9fa;
+		--light-accent: #e9ecef;
+		--border-color: #dee2e6;
+	}
+	
+	* {
+		box-sizing: border-box;
+	}
+	
+	html,
+	body {
+		margin: 0;
+		padding: 0;
+		width: 100%;
+		min-height: 100vh;
+		color: var(--text-color);
+		font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+		line-height: 1.6;
+	}
+	
+	body {
+		display: flex;
+		flex-direction: column;
+	}
+	
+	code, pre {
+		font-family: 'Source Code Pro', monospace;
+		background-color: var(--light-accent);
+		padding: 0.1em 0.3em;
+		border-radius: 3px;
+		font-size: 0.9em;
+	}
+	
+	pre {
+		padding: 1em;
+		overflow-x: auto;
+	}
+	
+	a {
+		color: var(--primary-color);
+		text-decoration: none;
+	}
+	
+	a:hover {
+		text-decoration: underline;
+	}
+	
+	h1, h2, h3, h4, h5, h6 {
+		margin-top: 2em;
+		margin-bottom: 0.5em;
+		line-height: 1.2;
+	}
+	
+	h1 {
+		font-size: 2.5rem;
+		margin-top: 1em;
+	}
+	
+	header {
+		background-color: var(--primary-color);
+		color: white;
+		padding: 1rem 0;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	}
+	
+	.header-content {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 1rem;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+	
+	header h1 {
+		margin: 0;
+		font-size: 1.5rem;
+	}
+	
+	header .highlight {
+		color: #f1faee;
+		font-weight: bold;
+	}
+	
+	nav ul {
+		display: flex;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	
+	nav li {
+		margin-left: 1.5rem;
+	}
+	
+	nav a {
+		color: white;
+		text-decoration: none;
+	}
+	
+	nav a:hover {
+		text-decoration: underline;
+	}
+	
+	main {
+		flex: 1;
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 2rem 1rem;
+	}
+	
+	footer {
+		background-color: var(--light-bg);
+		border-top: 1px solid var(--border-color);
+		padding: 1.5rem 0;
+		margin-top: 3rem;
+	}
+	
+	.footer-content {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 1rem;
+		text-align: center;
+		font-size: 0.9rem;
+		color: #6c757d;
+	}
+	
+	/* Responsive adjustments */
+	@media (max-width: 768px) {
+		.header-content {
+			flex-direction: column;
+			text-align: center;
+		}
+		
+		nav ul {
+			margin-top: 1rem;
+		}
+		
+		nav li {
+			margin: 0 0.7rem;
+		}
+	}
+</style>

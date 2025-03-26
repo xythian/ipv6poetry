@@ -1,0 +1,120 @@
+---
+import Explainer from '../components/explainer.md';
+import Layout from '../layouts/Layout.astro';
+import Converter from '../components/converter';
+---
+
+<Layout>
+  <div class="container">
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Transform IPv6 Addresses into <span class="highlight">Memorable Phrases</span></h1>
+        <p class="hero-text">
+          Convert hard-to-remember IPv6 addresses into easy-to-communicate word sequences.
+          Perfect for verbal communication and human-friendly network references.
+        </p>
+        <div class="installation-box">
+          <h3>Get the full implementation:</h3>
+          <pre class="code-box">
+# Python package
+pip install ipv6poetry
+
+# JavaScript/TypeScript (coming soon)
+npm install ipv6poetry</pre>
+        </div>
+      </div>
+      <div class="hero-image">
+        <div class="converter-wrapper">
+          <Converter client:load />
+        </div>
+      </div>
+    </section>
+
+    <section class="content">
+      <Explainer />
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .container {
+    width: 100%;
+  }
+  
+  .hero {
+    display: flex;
+    margin: 2rem 0 4rem;
+    gap: 2rem;
+  }
+  
+  .hero-content {
+    flex: 1;
+  }
+  
+  .hero-image {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .converter-wrapper {
+    width: 100%;
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+    line-height: 1.2;
+    margin-top: 0;
+  }
+  
+  .hero-text {
+    font-size: 1.2rem;
+    margin-top: 1.5rem;
+    color: #4a4a4a;
+  }
+  
+  .highlight {
+    color: var(--accent-color);
+  }
+  
+  .installation-box {
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+  }
+  
+  .installation-box h3 {
+    margin-top: 0;
+    font-size: 1.2rem;
+    color: var(--secondary-color);
+  }
+  
+  .code-box {
+    background-color: #272822;
+    color: #f8f8f2;
+    padding: 1rem;
+    border-radius: 4px;
+    font-family: 'Source Code Pro', monospace;
+    overflow-x: auto;
+    margin: 0;
+  }
+  
+  .content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 900px) {
+    .hero {
+      flex-direction: column;
+    }
+    
+    .hero-content, .hero-image {
+      flex: none;
+    }
+  }
+</style>

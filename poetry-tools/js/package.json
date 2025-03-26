@@ -1,0 +1,40 @@
+{
+  "name": "ipv6poetry",
+  "version": "0.1.0",
+  "description": "Tools for converting IPv6 addresses to poetic phrases and back",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "jest",
+    "lint": "eslint src --ext .ts",
+    "generate": "ts-node src/cli.ts generate",
+    "to-poetry": "ts-node src/cli.ts to-poetry",
+    "to-ipv6": "ts-node src/cli.ts to-ipv6"
+  },
+  "keywords": [
+    "ipv6",
+    "poetry",
+    "converter"
+  ],
+  "author": "IPv6 Poetry Project",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/yargs": "^17.0.24",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "jest": "^29.0.0",
+    "ts-jest": "^29.0.0",
+    "ts-node": "^10.0.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "node-fetch": "^2.6.9",
+    "wordnet": "^2.0.0",
+    "yargs": "^17.7.2"
+  }
+}

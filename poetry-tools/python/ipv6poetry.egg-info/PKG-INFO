@@ -1,0 +1,16 @@
+Metadata-Version: 2.4
+Name: ipv6poetry
+Version: 0.1.0
+Summary: Tools for converting IPv6 addresses to poetic phrases and back
+Author: IPv6 Poetry Project
+Author-email: user@example.com
+Keywords: ipv6,poetry,converter
+Requires-Python: >=3.6
+Requires-Dist: nltk>=3.6.0
+Requires-Dist: ipaddress>=1.0.0
+Dynamic: author
+Dynamic: author-email
+Dynamic: keywords
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary

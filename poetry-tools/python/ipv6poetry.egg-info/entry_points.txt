@@ -1,0 +1,2 @@
+[console_scripts]
+ipv6poetry = ipv6poetry.cli:main

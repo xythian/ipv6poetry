@@ -1,0 +1,256 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout>
+  <div class="rfc-container">
+    <div class="rfc-header">
+      <h1>IPv6 Poetry - Draft RFC</h1>
+      <p class="rfc-meta">Status: Draft | Last Updated: March 2025</p>
+    </div>
+    
+    <div class="rfc-document">
+      <section class="rfc-section">
+        <h2>Status of this Memo</h2>
+        <p>
+          This document specifies an experimental protocol for the Internet community, 
+          and requests discussion and suggestions for improvements. Distribution of this memo is unlimited.
+        </p>
+      </section>
+      
+      <section class="rfc-section">
+        <h2>Abstract</h2>
+        <p>
+          This document proposes a method for mapping IPv6 addresses to memorable poetic phrases and back, 
+          using a unified wordlist and a CRC32 checksum mechanism. The primary goal is to create human-friendly 
+          representations of IPv6 addresses that can be more easily remembered and communicated than traditional 
+          hexadecimal notation, while maintaining a deterministic bidirectional mapping.
+        </p>
+      </section>
+      
+      <section class="rfc-section">
+        <h2>1. Introduction</h2>
+        <p>
+          This document proposes a method for representing IPv6 addresses in a human-friendly format
+          using sequences of common words. The goal is to create an alternate representation that is:
+        </p>
+        <ul>
+          <li>Easy to communicate verbally</li>
+          <li>More memorable than hexadecimal representation</li>
+          <li>Less prone to transcription errors</li>
+          <li>Bidirectionally convertible with standard IPv6 notation</li>
+        </ul>
+      </section>
+      
+      <section class="rfc-section">
+        <h2>2. Background</h2>
+        <p>
+          IPv6 addresses present unique challenges for human usability due to their length and complexity.
+          While RFC 5952 defines a canonical text representation for IPv6 addresses, even its compressed
+          form remains challenging for verbal communication, memorization, and manual transcription.
+        </p>
+        <p>
+          IPv4 addresses (e.g., 192.168.1.1) are relatively simple to communicate verbally, but IPv6 
+          addresses (e.g., 2001:0db8:85a3:0000:0000:8a2e:0370:7334) are significantly more complex,
+          even in their compressed form (2001:db8:85a3::8a2e:370:7334).
+        </p>
+      </section>
+      
+      <section class="rfc-section">
+        <h2>3. Poetic Addressing Scheme</h2>
+        <p>
+          The IPv6 Poetry scheme divides a 128-bit IPv6 address into eight 16-bit segments and maps each
+          segment to a word from a single, unified wordlist. This creates a sequence of 8 words with a 9th 
+          checksum word that uniquely represents the IPv6 address.
+        </p>
+        
+        <h3>3.1 Wordlist Requirements</h3>
+        <p>The unified wordlist used for mapping must meet the following criteria:</p>
+        <ul>
+          <li>Contains exactly 65,536 (2^16) unique words to cover all possible 16-bit values</li>
+          <li>Words are common, easy to pronounce, and unlikely to be confused</li>
+          <li>Words are reasonably short (3-8 characters) for efficient communication</li>
+          <li>Primarily consists of common English words</li>
+          <li>Generated using a deterministic algorithm to ensure consistent results across implementations</li>
+        </ul>
+        
+        <h3>3.2 Wordlist Generation</h3>
+        <p>The reference wordlist is generated from:</p>
+        <ul>
+          <li>Common words from linguistic corpora (e.g., Brown corpus)</li>
+          <li>Filtered for ease of pronunciation (avoiding difficult consonant clusters)</li>
+          <li>Having reasonable vowel-to-consonant ratios</li>
+          <li>Normalized to lowercase</li>
+        </ul>
+        <p>
+          The reference implementation uses the NLTK library's word collections and WordNet synsets as a base,
+          then applies rules to ensure ease of pronunciation and memorability.
+        </p>
+        
+        <h3>3.3 Conversion Process</h3>
+        <h4>3.3.1 IPv6 to Poetry</h4>
+        <ol>
+          <li>Normalize the IPv6 address according to RFC 5952</li>
+          <li>Split the address into 8 segments of 16 bits each</li>
+          <li>For each segment, convert the hexadecimal value to decimal (0-65535)</li>
+          <li>Look up the word corresponding to that decimal value in the unified wordlist</li>
+          <li>Calculate a CRC32 checksum of all 8 segments and use it to get a 9th word</li>
+          <li>Join the 9 words with spaces to form the poetic phrase</li>
+        </ol>
+        
+        <h4>3.3.2 Poetry to IPv6</h4>
+        <ol>
+          <li>Split the phrase into words (expecting 8 or 9 words)</li>
+          <li>Use the first 8 words for address conversion</li>
+          <li>For each word, look up its index in the unified wordlist</li>
+          <li>Convert each index to a 16-bit hexadecimal value</li>
+          <li>Join the 8 hexadecimal values with colons</li>
+          <li>If a 9th word is present, verify it against the calculated checksum</li>
+          <li>Normalize the resulting address according to RFC 5952</li>
+        </ol>
+      </section>
+      
+      <section class="rfc-section">
+        <h2>4. Checksum Word</h2>
+        <p>
+          To improve resilience against transcription errors, a 9th word is added to
+          the poetic phrase. This word serves as a checksum and is derived from the CRC32 hash of
+          the original 8 segments (16-bit values). The checksum provides detection of common errors:
+        </p>
+        <ul>
+          <li>Transposed words or segments</li>
+          <li>Missing or added words</li>
+          <li>Words substituted with incorrect ones</li>
+        </ul>
+        <p>
+          The checksum algorithm is simple enough to be implemented across all platforms:
+        </p>
+        <pre>
+def calculate_checksum(address_segments):
+    # Convert segments to bytes
+    bytes_data = b''
+    for segment in address_segments:
+        bytes_data += segment.to_bytes(2, byteorder='big')
+    
+    # Use zlib CRC32 for a simple checksum
+    checksum = zlib.crc32(bytes_data) & 0xFFFF  # Keep only 16 bits
+    return checksum
+        </pre>
+      </section>
+      
+      <section class="rfc-section">
+        <h2>5. Examples</h2>
+        <pre>
+IPv6 Address: 2001:db8::1
+Poetic Phrase: schema deaf the the the the the and rules
+                                            (checksum)
+
+IPv6 Address: 2001:4860:4860::8888
+Poetic Phrase: schema engulf engulf the the the the said arrived
+                                                   (checksum)
+
+IPv6 Address: 2620:0:2d0:200::7
+Poetic Phrase: deaf the other all new the the the those
+                                           (checksum)
+        </pre>
+      </section>
+      
+      <section class="rfc-section">
+        <h2>6. Implementation Considerations</h2>
+        <h3>6.1 Wordlist Distribution</h3>
+        <p>
+          For interoperability, implementations must use the same wordlist. The reference wordlist
+          is available at the project GitHub repository and can be bundled with implementations or
+          fetched from a well-known location.
+        </p>
+        
+        <h3>6.2 Localization</h3>
+        <p>
+          While the primary wordlist is in English, implementations may provide wordlists in other
+          languages, with the requirement that each wordlist maintains exactly 65,536 unique words.
+          When communicating across language boundaries, the English wordlist should be used as the
+          common reference.
+        </p>
+      </section>
+      
+      <section class="rfc-section">
+        <h2>7. Security Considerations</h2>
+        <p>
+          The poetic representation is intended for human communication and should not be used as
+          a security mechanism. The mapping between IPv6 addresses and poetic phrases is deterministic
+          and public, providing no security through obscurity.
+        </p>
+      </section>
+      
+      <section class="rfc-section">
+        <h2>8. References</h2>
+        <ul>
+          <li>RFC 5952 - A Recommendation for IPv6 Address Text Representation</li>
+          <li>RFC 3986 - Uniform Resource Identifier (URI): Generic Syntax</li>
+          <li>Diceware - <a href="https://diceware.dmuth.org" target="_blank">https://diceware.dmuth.org</a></li>
+        </ul>
+      </section>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .rfc-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  .rfc-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .rfc-meta {
+    color: #666;
+    font-style: italic;
+  }
+  
+  .rfc-document {
+    line-height: 1.7;
+  }
+  
+  .rfc-section {
+    margin-bottom: 2rem;
+  }
+  
+  .rfc-section h2 {
+    border-bottom: 1px solid #eaeaea;
+    padding-bottom: 0.3rem;
+    font-size: 1.5rem;
+  }
+  
+  .rfc-section h3 {
+    font-size: 1.3rem;
+    margin-top: 1.5rem;
+  }
+  
+  .rfc-section h4 {
+    font-size: 1.1rem;
+    margin-top: 1.2rem;
+  }
+  
+  .rfc-section ul, .rfc-section ol {
+    padding-left: 1.5rem;
+  }
+  
+  .rfc-section li {
+    margin-bottom: 0.5rem;
+  }
+  
+  pre {
+    background-color: #f5f5f5;
+    padding: 1rem;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-size: 0.9rem;
+    border: 1px solid #ddd;
+  }
+</style>

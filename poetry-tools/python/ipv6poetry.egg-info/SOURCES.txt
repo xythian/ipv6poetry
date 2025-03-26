@@ -1,0 +1,14 @@
+README.md
+setup.py
+ipv6poetry/__init__.py
+ipv6poetry/cli.py
+ipv6poetry/converters.py
+ipv6poetry/specialized_wordlists.py
+ipv6poetry/voice_friendly.py
+ipv6poetry/wordlist_generator.py
+ipv6poetry.egg-info/PKG-INFO
+ipv6poetry.egg-info/SOURCES.txt
+ipv6poetry.egg-info/dependency_links.txt
+ipv6poetry.egg-info/entry_points.txt
+ipv6poetry.egg-info/requires.txt
+ipv6poetry.egg-info/top_level.txt
