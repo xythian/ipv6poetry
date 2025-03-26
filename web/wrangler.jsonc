@@ -1,0 +1,7 @@
+{
+  "name": "ipv6poetry",
+  "compatibility_date": "2025-03-26",
+  "assets": {
+    "directory": "./dist"
+  }
+}
