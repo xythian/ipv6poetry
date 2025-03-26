@@ -10,7 +10,7 @@ compatibility_date = "2025-03-26"
 
 # Build settings
 [build]
-  command = "npm run build"  # Assuming build is configured in package.json
+  command = "bun install && bun run build"
   output_dir = "dist"
   base_dir = ""
   root_dir = "web"

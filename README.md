@@ -56,8 +56,8 @@ npm run to-ipv6 "schema deaf the the the the the and rules"
 
 ```bash
 cd web
-npm install
-npm run dev
+bun install
+bun run dev
 ```
 
 Then open http://localhost:4321 in your browser.

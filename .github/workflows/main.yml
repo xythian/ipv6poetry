@@ -83,10 +83,15 @@ jobs:
         cd poetry-tools/python
         pip install -e .
     
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v1
+      with:
+        bun-version: latest
+    
     - name: Install JS Dependencies
       run: |
         cd poetry-tools/js
-        npm ci
+        bun install
     
     - name: Run Compatibility Test
       run: ./tests/compatibility_test.js
@@ -101,18 +106,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Use Node.js
-      uses: actions/setup-node@v3
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v1
       with:
-        node-version: '18.x'
-        cache: 'npm'
-        cache-dependency-path: web/package-lock.json
+        bun-version: latest
     
     - name: Install Dependencies
-      run: npm ci
+      run: bun install
     
     - name: Build
-      run: npm run build
+      run: bun run build
     
     - name: Publish to Cloudflare Pages
       uses: cloudflare/wrangler-action@v3
