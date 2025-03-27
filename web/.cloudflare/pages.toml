@@ -1,0 +1,15 @@
+# .cloudflare/pages.toml
+# Configuration for Cloudflare Pages
+
+[build]
+  command = "bun install && bun run build"
+  output_dir = "dist"
+  
+[site]
+  bucket = "./dist"
+
+[cleanUrls]
+  enable = true
+  
+[compatibility]
+  engines = { astro = "^5.0.0" }
