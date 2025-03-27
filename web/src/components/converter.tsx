@@ -1,10 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { IPv6PoetryConverter } from '../lib/ipv6poetry';
 
+// Interface for validation results
+interface ValidationResult {
+  validChecksum: boolean;
+  invalidWords: Array<{index: number; word: string}>;
+  expectedChecksum?: string;
+  actualChecksum?: string;
+}
+
 export default function Converter() {
   const [ipv6Address, setIpv6Address] = useState('2001:db8::1');
   const [poeticPhrase, setPoeticPhrase] = useState('');
   const [error, setError] = useState('');
+  const [validation, setValidation] = useState<ValidationResult | null>(null);
   const [converter, setConverter] = useState<IPv6PoetryConverter | null>(null);
   const [direction, setDirection] = useState<'to-poetry' | 'to-ipv6'>('to-poetry');
   const [isLoading, setIsLoading] = useState(true);
@@ -45,13 +54,21 @@ export default function Converter() {
     if (!converter) return;
     
     setError('');
+    setValidation(null);
+    
     try {
       if (direction === 'to-poetry') {
         const phrase = converter.addressToPoetry(ipv6Address);
         setPoeticPhrase(phrase);
       } else { // to-ipv6
-        const address = converter.poetryToAddress(poeticPhrase);
-        setIpv6Address(address);
+        const result = converter.poetryToAddress(poeticPhrase);
+        setIpv6Address(result.address);
+        setValidation({
+          validChecksum: result.validChecksum,
+          invalidWords: result.invalidWords,
+          expectedChecksum: result.expectedChecksum,
+          actualChecksum: result.actualChecksum
+        });
       }
     } catch (err) {
       setError((err as Error).message);
@@ -62,6 +79,7 @@ export default function Converter() {
   const toggleDirection = () => {
     setDirection(direction === 'to-poetry' ? 'to-ipv6' : 'to-poetry');
     setError('');
+    setValidation(null);
   };
 
   // Handle checksum toggle
@@ -178,6 +196,41 @@ export default function Converter() {
                   <label>IPv6 Address:</label>
                   <div className="result-text">{ipv6Address}</div>
                 </div>
+
+                {validation && (
+                  <div className="validation-results">
+                    {/* Display checksum validation result */}
+                    {validation.expectedChecksum && (
+                      <div className={`checksum-validation ${validation.validChecksum ? 'valid' : 'invalid'}`}>
+                        <h4>Checksum Validation:</h4>
+                        {validation.validChecksum ? (
+                          <p className="validation-success">✓ Checksum is valid</p>
+                        ) : (
+                          <div className="validation-error">
+                            <p>✗ Checksum is invalid</p>
+                            <p>Expected: <span className="expected">{validation.expectedChecksum}</span></p>
+                            <p>Received: <span className="received">{validation.actualChecksum}</span></p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    
+                    {/* Display invalid words if any */}
+                    {validation.invalidWords.length > 0 && (
+                      <div className="invalid-words">
+                        <h4>Invalid Words:</h4>
+                        <p>The following words were not found in the wordlist and were replaced with zeros:</p>
+                        <ul>
+                          {validation.invalidWords.map((item, idx) => (
+                            <li key={idx}>
+                              Position {item.index + 1}: "<span className="invalid-word">{item.word}</span>"
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                )}
               </>
             )}
             
@@ -320,6 +373,69 @@ export default function Converter() {
           color: #333;
           font-family: 'Source Code Pro', monospace;
           margin: 8px 0;
+        }
+        
+        .validation-results {
+          margin-top: 15px;
+          padding: 10px;
+          border-radius: 4px;
+          background-color: #f8f9fa;
+          border: 1px solid #e9ecef;
+        }
+        
+        .validation-results h4 {
+          margin-top: 0;
+          margin-bottom: 8px;
+          font-size: 16px;
+        }
+        
+        .checksum-validation {
+          padding: 10px;
+          border-radius: 4px;
+          margin-bottom: 10px;
+        }
+        
+        .checksum-validation.valid {
+          background-color: #d4edda;
+          border: 1px solid #c3e6cb;
+          color: #155724;
+        }
+        
+        .checksum-validation.invalid {
+          background-color: #f8d7da;
+          border: 1px solid #f5c6cb;
+          color: #721c24;
+        }
+        
+        .validation-success {
+          color: #28a745;
+          font-weight: bold;
+          margin: 0;
+        }
+        
+        .validation-error {
+          margin: 0;
+        }
+        
+        .validation-error p {
+          margin: 4px 0;
+        }
+        
+        .expected, .received {
+          font-weight: bold;
+        }
+        
+        .invalid-words {
+          padding: 10px;
+          background-color: #fff3cd;
+          border: 1px solid #ffeeba;
+          border-radius: 4px;
+          color: #856404;
+        }
+        
+        .invalid-word {
+          font-weight: bold;
+          text-decoration: line-through;
         }
         
         .loading-container {

@@ -155,9 +155,15 @@ export class IPv6PoetryConverter {
   /**
    * Convert a poetic phrase back to an IPv6 address
    * @param poeticPhrase Poetic phrase to convert
-   * @returns IPv6 address
+   * @returns An object containing the converted address and validation info
    */
-  poetryToAddress(poeticPhrase: string): string {
+  poetryToAddress(poeticPhrase: string): { 
+    address: string; 
+    validChecksum: boolean; 
+    invalidWords: Array<{index: number; word: string}>;
+    expectedChecksum?: string;
+    actualChecksum?: string;
+  } {
     // Split the phrase into words
     const words = poeticPhrase.toLowerCase().trim().split(/\s+/);
     
@@ -172,8 +178,10 @@ export class IPv6PoetryConverter {
     // Convert each word to a hexadecimal segment
     const segments: string[] = [];
     const decimalValues: number[] = [];
+    const invalidWords: Array<{index: number; word: string}> = [];
     
-    for (const word of addressWords) {
+    for (let i = 0; i < addressWords.length; i++) {
+      const word = addressWords[i];
       if (this.reverseMap.has(word)) {
         const idx = this.reverseMap.get(word)!;
         const hexValue = idx.toString(16).padStart(4, '0');
@@ -184,18 +192,33 @@ export class IPv6PoetryConverter {
         console.warn(`Warning: Word '${word}' not found in wordlist`);
         segments.push('0000');
         decimalValues.push(0);
+        invalidWords.push({ index: i, word });
       }
     }
+    
+    // Initialize checksum validation result
+    let validChecksum = true;
+    let expectedChecksum: string | undefined;
+    let actualChecksum: string | undefined;
     
     // Verify checksum if provided and enabled
     if (this.includeChecksum && words.length >= 9) {
       const checksumWord = words[8];
-      const expectedChecksum = this.calculateChecksum(decimalValues);
-      const expectedWord = this.wordlist[expectedChecksum % this.wordlist.length];
+      const expectedChecksumIdx = this.calculateChecksum(decimalValues);
+      const expectedWord = this.wordlist[expectedChecksumIdx % this.wordlist.length];
+      
+      expectedChecksum = expectedWord;
+      actualChecksum = checksumWord;
       
       if (checksumWord !== expectedWord) {
+        validChecksum = false;
         console.warn(`Warning: Checksum mismatch! Expected '${expectedWord}', got '${checksumWord}'`);
         console.warn("The phrase may contain transcription errors");
+        
+        // Check if the checksum word is even in the wordlist
+        if (!this.reverseMap.has(checksumWord)) {
+          invalidWords.push({ index: 8, word: checksumWord });
+        }
       }
     }
     
@@ -203,7 +226,13 @@ export class IPv6PoetryConverter {
     const ipv6Address = segments.join(':');
     
     // Normalize it
-    return this.normalizeIPv6(ipv6Address);
+    return {
+      address: this.normalizeIPv6(ipv6Address),
+      validChecksum,
+      invalidWords,
+      expectedChecksum,
+      actualChecksum
+    };
   }
   
   /**
