@@ -47,10 +47,10 @@ ipv6poetry to-poetry 2001:db8::1 --wordlist-dir /path/to/wordlists
 
 ```bash
 # Convert poetry back to IPv6
-ipv6poetry to-ipv6 "schema deaf samarium the the engulf fields osmanli arrives5"
+ipv6poetry to-ipv6 "schema deaf samarium the the engulf fields osmanli below5"
 
 # Specify a custom wordlist directory
-ipv6poetry to-ipv6 "schema deaf samarium the the engulf fields osmanli arrives5" --wordlist-dir /path/to/wordlists
+ipv6poetry to-ipv6 "schema deaf samarium the the engulf fields osmanli below5" --wordlist-dir /path/to/wordlists
 ```
 
 ## Python API
@@ -88,7 +88,7 @@ print(f"IPv6: {ipv6_address}")
 
 ```
 IPv6: 2001:db8:85a3::8a2e:370:7334
-Poetic phrase: schema deaf samarium the the engulf fields osmanli arrives5
+Poetic phrase: schema deaf samarium the the engulf fields osmanli below5
 ```
 
 ## Error Detection
@@ -97,12 +97,12 @@ The format includes a checksum word that helps detect transcription errors:
 
 ```
 # Correct phrase
-ipv6poetry to-ipv6 "schema deaf samarium the the engulf fields osmanli arrives5"
+ipv6poetry to-ipv6 "schema deaf samarium the the engulf fields osmanli below5"
 IPv6: 2001:db8:85a3::8a2e:370:7334
 
 # Incorrect phrase (changed "fields" to "house")
-ipv6poetry to-ipv6 "schema deaf samarium the the engulf house osmanli arrives5"
-Warning: Checksum mismatch! Expected 'appeal5', got 'arrives5'
+ipv6poetry to-ipv6 "schema deaf samarium the the engulf house osmanli below5"
+Warning: Checksum mismatch! Expected 'appeal5', got 'below5'
 The phrase may contain transcription errors
 IPv6: 2001:db8:85a3::8a2e:5c:7334
 ```
