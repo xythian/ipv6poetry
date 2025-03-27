@@ -27,9 +27,18 @@ function runPythonConverter(address) {
   // Try different Python commands to handle different environments
   const pythonCommands = ['python', 'python3', 'py', 'python3.11'];
   
+  // Resolve the wordlist directory path relative to the repo root
+  const repoRoot = path.resolve(__dirname, '..');
+  const wordlistDir = path.join(repoRoot, 'wordlists');
+  
   for (const pythonCmd of pythonCommands) {
     try {
-      const result = spawnSync(pythonCmd, ['-m', 'ipv6poetry.cli', 'to-poetry', address], {
+      const result = spawnSync(pythonCmd, [
+        '-m', 'ipv6poetry.cli', 
+        'to-poetry', 
+        address,
+        '--wordlist-dir', wordlistDir
+      ], {
         cwd: pythonPath,
         encoding: 'utf8'
       });
@@ -54,15 +63,19 @@ function runJsConverter(address) {
   // Try to use Bun first, fall back to Node if Bun is not available
   let result;
   
+  // Resolve the wordlist directory path relative to the repo root
+  const repoRoot = path.resolve(__dirname, '..');
+  const wordlistDir = path.join(repoRoot, 'wordlists');
+  
   try {
-    result = spawnSync('bun', ['src/cli.ts', 'to-poetry', address], {
+    result = spawnSync('bun', ['src/cli.ts', 'to-poetry', address, '--wordlist-dir', wordlistDir], {
       cwd: jsPath,
       encoding: 'utf8'
     });
   } catch (error) {
     // If Bun is not available, fall back to Node with ts-node
     console.log('Bun not available, falling back to Node.js...');
-    result = spawnSync('node', ['--loader', 'ts-node/esm', 'src/cli.ts', 'to-poetry', address], {
+    result = spawnSync('node', ['--loader', 'ts-node/esm', 'src/cli.ts', 'to-poetry', address, '--wordlist-dir', wordlistDir], {
       cwd: jsPath,
       encoding: 'utf8'
     });
@@ -76,9 +89,31 @@ function runJsConverter(address) {
   return result.stdout.trim();
 }
 
+// Function to verify wordlists exist
+function verifyWordlistsExist() {
+  const repoRoot = path.resolve(__dirname, '..');
+  const wordlistDir = path.join(repoRoot, 'wordlists');
+  const wordlistFile = path.join(wordlistDir, 'wordlist.txt');
+  
+  // Check if wordlist file exists
+  if (!fs.existsSync(wordlistFile)) {
+    console.error('ERROR: Wordlist file not found at:', wordlistFile);
+    console.error('The standard wordlist is required for compatibility tests.');
+    console.error('Please ensure the wordlists directory is properly initialized.');
+    console.error('NOTE: Do not generate wordlists dynamically - they must be shared across implementations.');
+    process.exit(1);
+  } else {
+    console.log('Using wordlist from:', wordlistDir);
+  }
+}
+
 // Run the compatibility test
 function runCompatibilityTest() {
   console.log('Running IPv6Poetry compatibility test...');
+  
+  // Verify wordlists exist
+  verifyWordlistsExist();
+  
   console.log('=======================================');
   
   let allPassed = true;
@@ -115,4 +150,9 @@ function runCompatibilityTest() {
 }
 
 // Run the test
-runCompatibilityTest();
+try {
+  runCompatibilityTest();
+} catch (error) {
+  console.error('Error running compatibility test:', error);
+  process.exit(1);
+}
