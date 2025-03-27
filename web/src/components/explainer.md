@@ -22,14 +22,12 @@ The IPv6 Poetry system:
 4. **Adds** a 9th checksum word for error detection (derived from the CRC32 hash of all 8 segments)
 
 For example, instead of remembering:
-```
-2001:db8::1
-```
+
+`2001:db8::1`
 
 You can use the poetic phrase:
-```
-schema deaf the the the the the and rules
-```
+
+`schema deaf the the the the the and rules`
 
 Where "rules" is the checksum word that helps detect transcription errors.
 
