@@ -66,31 +66,31 @@ async function main(): Promise<void> {
         default: defaultWordlistDir
       }
     })
-    .command('to-poetry', 'Convert an IPv6 address to a poetic phrase', {
-      address: {
-        type: 'string',
-        description: 'IPv6 address to convert',
-        demandOption: true
-      },
-      'wordlist-dir': {
-        alias: 'w',
-        type: 'string',
-        description: 'Directory containing word lists',
-        default: defaultWordlistDir
-      }
+    .command('to-poetry <address>', 'Convert an IPv6 address to a poetic phrase', (yargs) => {
+      return yargs
+        .positional('address', {
+          type: 'string',
+          description: 'IPv6 address to convert'
+        })
+        .option('wordlist-dir', {
+          alias: 'w',
+          type: 'string',
+          description: 'Directory containing word lists',
+          default: defaultWordlistDir
+        });
     })
-    .command('to-ipv6', 'Convert a poetic phrase to an IPv6 address', {
-      phrase: {
-        type: 'string',
-        description: 'Poetic phrase to convert (in quotes)',
-        demandOption: true
-      },
-      'wordlist-dir': {
-        alias: 'w',
-        type: 'string',
-        description: 'Directory containing word lists',
-        default: defaultWordlistDir
-      }
+    .command('to-ipv6 <phrase>', 'Convert a poetic phrase to an IPv6 address', (yargs) => {
+      return yargs
+        .positional('phrase', {
+          type: 'string',
+          description: 'Poetic phrase to convert (in quotes)'
+        })
+        .option('wordlist-dir', {
+          alias: 'w',
+          type: 'string',
+          description: 'Directory containing word lists',
+          default: defaultWordlistDir
+        });
     })
     .demandCommand(1, 'You need to specify a command')
     .help()

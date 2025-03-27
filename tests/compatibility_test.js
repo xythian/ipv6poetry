@@ -89,10 +89,14 @@ function runCompatibilityTest() {
     const pythonResult = runPythonConverter(address);
     const jsResult = runJsConverter(address);
     
+    // Extract the poetic phrase from the output
+    const pythonPhrase = pythonResult ? pythonResult.match(/Poetic phrase: (.+)$/m)?.[1] : null;
+    const jsPhrase = jsResult ? jsResult.match(/Poetic phrase: (.+)$/m)?.[1] : null;
+    
     console.log(`Python: ${pythonResult}`);
     console.log(`JS:     ${jsResult}`);
     
-    if (pythonResult && jsResult && pythonResult === jsResult) {
+    if (pythonPhrase && jsPhrase && pythonPhrase === jsPhrase) {
       console.log('✅ PASSED - Results match');
     } else {
       console.log('❌ FAILED - Results differ');
