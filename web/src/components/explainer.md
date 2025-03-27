@@ -46,6 +46,18 @@ IPv6 Poetry is useful in scenarios where:
 
 IPv6 Poetry is inspired by systems like [Diceware passwords](https://diceware.dmuth.org), which use word sequences to represent high-entropy values. The full specification is available in our [draft RFC](/rfc).
 
+## Contributing
+
+This is an open-source project in active development. We welcome contributions, feedback, and ideas!
+
+- **GitHub Repository**: [github.com/xythian/ipv6poetry](https://github.com/xythian/ipv6poetry)
+- **Report Issues**: If you find a bug or have a suggestion, please [open an issue](https://github.com/xythian/ipv6poetry/issues)
+- **Improvements**: Pull requests are welcome for both the code and the wordlist
+
+### AI-Assisted Development
+
+🤖 This project was developed with assistance from [Claude Code](https://claude.ai/code), Anthropic's AI coding assistant. It serves as both a useful tool and an exploration of how AI can collaborate with humans in software development. See our [README](https://github.com/xythian/ipv6poetry#ai-collaboration) for more details on this aspect of the project.
+
 ## References
 
 - [RFC 5952](https://www.rfc-editor.org/rfc/rfc5952) - A Recommendation for IPv6 Address Text Representation

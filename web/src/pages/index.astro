@@ -14,17 +14,22 @@ import Converter from '../components/converter';
           Perfect for verbal communication and human-friendly network references.
         </p>
         <div class="installation-box">
-          <h3>Get the full implementation:</h3>
+          <h3>Clone the source code:</h3>
           <pre class="code-box">
-# Python package
-pip install ipv6poetry
+# Get the repository
+git clone https://github.com/xythian/ipv6poetry.git
 
-# JavaScript/TypeScript (coming soon)
-npm install ipv6poetry</pre>
+# Python implementation
+cd ipv6poetry/poetry-tools/python
+pip install -e .
+
+# JavaScript/TypeScript implementation
+cd ipv6poetry/poetry-tools/js
+bun install</pre>
         </div>
       </div>
       <div class="hero-image">
-        <div class="converter-wrapper">
+        <div id="converter" class="converter-wrapper">
           <Converter client:load />
         </div>
       </div>

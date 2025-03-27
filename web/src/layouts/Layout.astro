@@ -19,6 +19,7 @@
 				<nav>
 					<ul>
 						<li><a href="/">Home</a></li>
+						<li><a href="/#converter" class="try-button">Try it!</a></li>
 						<li><a href="/rfc">RFC Draft</a></li>
 						<li><a href="https://github.com/xythian/ipv6poetry" target="_blank">GitHub</a></li>
 					</ul>
@@ -146,6 +147,19 @@
 	
 	nav a:hover {
 		text-decoration: underline;
+	}
+	
+	.try-button {
+		background-color: var(--accent-color);
+		padding: 0.4rem 0.8rem;
+		border-radius: 4px;
+		font-weight: bold;
+		transition: background-color 0.2s;
+	}
+	
+	.try-button:hover {
+		background-color: #8a0ca3;
+		text-decoration: none;
 	}
 	
 	main {

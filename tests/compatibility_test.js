@@ -23,26 +23,50 @@ const TEST_ADDRESSES = [
 // Function to run Python converter
 function runPythonConverter(address) {
   const pythonPath = path.resolve(__dirname, '../poetry-tools/python');
-  const result = spawnSync('python', ['-m', 'ipv6poetry.cli', 'to-poetry', address], {
-    cwd: pythonPath,
-    encoding: 'utf8'
-  });
   
-  if (result.status !== 0) {
-    console.error(`Error running Python converter: ${result.stderr}`);
-    return null;
+  // Try different Python commands to handle different environments
+  const pythonCommands = ['python', 'python3', 'py', 'python3.11'];
+  
+  for (const pythonCmd of pythonCommands) {
+    try {
+      const result = spawnSync(pythonCmd, ['-m', 'ipv6poetry.cli', 'to-poetry', address], {
+        cwd: pythonPath,
+        encoding: 'utf8'
+      });
+      
+      if (result.status === 0) {
+        return result.stdout.trim();
+      }
+    } catch (error) {
+      // Command not found, try the next one
+      continue;
+    }
   }
   
-  return result.stdout.trim();
+  console.error(`Error: Could not run Python converter with any available Python command`);
+  return null;
 }
 
 // Function to run JavaScript converter
 function runJsConverter(address) {
   const jsPath = path.resolve(__dirname, '../poetry-tools/js');
-  const result = spawnSync('node', ['--loader', 'ts-node/esm', 'src/cli.ts', 'to-poetry', address], {
-    cwd: jsPath,
-    encoding: 'utf8'
-  });
+  
+  // Try to use Bun first, fall back to Node if Bun is not available
+  let result;
+  
+  try {
+    result = spawnSync('bun', ['src/cli.ts', 'to-poetry', address], {
+      cwd: jsPath,
+      encoding: 'utf8'
+    });
+  } catch (error) {
+    // If Bun is not available, fall back to Node with ts-node
+    console.log('Bun not available, falling back to Node.js...');
+    result = spawnSync('node', ['--loader', 'ts-node/esm', 'src/cli.ts', 'to-poetry', address], {
+      cwd: jsPath,
+      encoding: 'utf8'
+    });
+  }
   
   if (result.status !== 0) {
     console.error(`Error running JavaScript converter: ${result.stderr}`);

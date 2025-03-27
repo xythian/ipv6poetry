@@ -1,7 +1,0 @@
-click==8.1.8
-ipaddress==1.0.23
--e git+ssh://git@github.com/xythian/ipv6poetry.git@ed0be1d09aa35553a26ca2f941ec6ca2a8178e71#egg=ipv6poetry&subdirectory=poetry-tools/python
-joblib==1.4.2
-nltk==3.9.1
-regex==2024.11.6
-tqdm==4.67.1

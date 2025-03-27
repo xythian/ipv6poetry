@@ -2,6 +2,8 @@
 
 Convert IPv6 addresses to memorable poetic phrases and back, using a unified wordlist and checksum mechanism.
 
+> 🤖 **Development Note**: This project was developed with assistance from [Claude Code](https://claude.ai/code), Anthropic's AI coding assistant. It serves both as a useful tool and as an exploration of AI collaboration in software development.
+
 ## Overview
 
 IPv6 addresses are difficult to communicate verbally and remember due to their length and complexity. IPv6 Poetry provides a solution by mapping IPv6 addresses to sequences of common words that are easier to remember, pronounce, and transcribe.
@@ -103,3 +105,29 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 - Inspired by Diceware for creating memorable passphrases
 - Based on similar concepts to what3words for location encoding
+
+## AI Collaboration
+
+This project explores the collaboration between human developers and AI assistants in software development. The code, documentation, and website were created in partnership with [Claude Code](https://claude.ai/code), Anthropic's AI coding assistant.
+
+### Development Process
+
+- Initial concept and requirements were specified by humans
+- Implementation details, algorithms, and code structure were developed collaboratively
+- Claude Code contributed to:
+  - Python and JavaScript implementations
+  - Unit test development
+  - Documentation and website content
+  - Build and deployment configuration
+
+This experiment demonstrates how AI can enhance developer productivity while preserving human creative direction. The resulting code quality, readability, and maintainability benefited from this collaboration.
+
+### Reflections
+
+Working with an AI assistant on this project offered several insights:
+- AI can efficiently implement complex algorithms when given clear requirements
+- Human oversight remains essential for design decisions and quality assurance
+- The conversation-based approach allowed for iterative refinement
+- AI can handle both high-level architecture and low-level implementation details
+
+We welcome feedback on both the IPv6 Poetry concept itself and the hybrid AI/human development approach.

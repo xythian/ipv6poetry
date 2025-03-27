@@ -68,25 +68,21 @@ jobs:
     
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18.x'
     
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
     
-    - name: Install Python Dependencies
-      run: |
-        cd poetry-tools/python
-        pip install -e .
-    
     - name: Setup Bun
       uses: oven-sh/setup-bun@v1
       with:
         bun-version: latest
+    
+    - name: Install Python Dependencies
+      run: |
+        cd poetry-tools/python
+        pip install -e .
     
     - name: Install JS Dependencies
       run: |
@@ -94,7 +90,12 @@ jobs:
         bun install
     
     - name: Run Compatibility Test
-      run: ./tests/compatibility_test.js
+      run: |
+        # Make the compatibility test script executable
+        chmod +x ./tests/compatibility_test.js
+        
+        # Use Bun to run the compatibility test
+        bun ./tests/compatibility_test.js
 
   # Note: Deployment is handled directly by Cloudflare Pages
   # through the GitHub integration
