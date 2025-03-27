@@ -356,6 +356,11 @@ class MemorableWordlistGenerator:
         """Generate the wordlist and write to file"""
         words = self.generate_wordlist(size=size)
         
+        # Ensure 'zero' is the first word in the wordlist (at index 0)
+        if 'zero' in words:
+            words.remove('zero')  # Remove 'zero' if it already exists
+        words = ['zero'] + words[:size-1]  # Add 'zero' at the beginning and keep size-1 words
+        
         # Write to file
         output_path = os.path.join(self.output_dir, filename)
         with open(output_path, 'w') as f:
@@ -363,6 +368,7 @@ class MemorableWordlistGenerator:
                 f.write(word + '\n')
         
         print(f"Generated {len(words)} memorable words in {output_path}")
+        print("'zero' is guaranteed to be the first word in the wordlist (at index 0)")
         return words
 
 if __name__ == "__main__":

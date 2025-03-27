@@ -249,6 +249,46 @@ export class WordlistGenerator {
   }
   
   /**
+   * Ensure 'zero' is the first word in a wordlist
+   * @param wordlistPath Path to the wordlist file
+   */
+  async ensureZeroIsFirstWord(wordlistPath: string): Promise<void> {
+    await this.initialize();
+    
+    // Read the existing wordlist
+    const fs = await import('fs/promises');
+    try {
+      const content = await fs.readFile(wordlistPath, 'utf8');
+      let words = content.trim().split('\n').map(word => word.trim());
+      
+      // Check if 'zero' is already the first word
+      if (words[0] === 'zero') {
+        console.log("'zero' is already the first word in the wordlist");
+        return;
+      }
+      
+      // Remove 'zero' if it exists elsewhere in the list
+      const zeroIndex = words.indexOf('zero');
+      if (zeroIndex !== -1) {
+        words.splice(zeroIndex, 1);
+      }
+      
+      // Add 'zero' as the first word and keep the total size the same
+      words = ['zero', ...words.slice(0, 65535)];
+      
+      // Write the updated wordlist back to the file
+      await fs.writeFile(wordlistPath, words.join('\n') + '\n');
+      console.log(`Updated wordlist to ensure 'zero' is the first word in ${wordlistPath}`);
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+        console.error(`Wordlist file not found: ${wordlistPath}`);
+      } else {
+        console.error(`Error updating wordlist: ${error}`);
+      }
+    }
+  }
+
+  /**
    * Generate all categories as specified in the RFC
    */
   async generateAllCategories(): Promise<void> {

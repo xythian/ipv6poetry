@@ -8,7 +8,7 @@ Convert IPv6 addresses to memorable poetic phrases and back, using a unified wor
 
 IPv6 addresses are difficult to communicate verbally and remember due to their length and complexity. IPv6 Poetry provides a solution by mapping IPv6 addresses to sequences of common words that are easier to remember, pronounce, and transcribe.
 
-For example, the address `2001:db8::1` becomes the poetic phrase `schema deaf the the the the the and rules`.
+For example, the address `2001:0db8:85a3:0000:0000:8a2e:0370:7334` becomes the poetic phrase `schema deaf samarium zero zero engulf fields osmanli arrives5`.
 
 ## Features
 
@@ -35,10 +35,10 @@ cd poetry-tools/python
 pip install -e .
 
 # Convert IPv6 to poetry
-ipv6poetry to-poetry 2001:db8::1
+ipv6poetry to-poetry 2001:0db8:85a3:0000:0000:8a2e:0370:7334
 
 # Convert poetry back to IPv6
-ipv6poetry to-ipv6 "schema deaf the the the the the and rules"
+ipv6poetry to-ipv6 "schema deaf samarium zero zero engulf fields osmanli arrives5"
 ```
 
 ### JavaScript
@@ -48,10 +48,10 @@ cd poetry-tools/js
 npm install
 
 # Convert IPv6 to poetry
-npm run to-poetry 2001:db8::1
+npm run to-poetry 2001:0db8:85a3:0000:0000:8a2e:0370:7334
 
 # Convert poetry back to IPv6
-npm run to-ipv6 "schema deaf the the the the the and rules"
+npm run to-ipv6 "schema deaf samarium zero zero engulf fields osmanli arrives5"
 ```
 
 ### Web Interface

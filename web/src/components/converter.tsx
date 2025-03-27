@@ -10,7 +10,7 @@ interface ValidationResult {
 }
 
 export default function Converter() {
-  const [ipv6Address, setIpv6Address] = useState('2001:db8::1');
+  const [ipv6Address, setIpv6Address] = useState('2001:0db8:85a3:0000:0000:8a2e:0370:7334');
   const [poeticPhrase, setPoeticPhrase] = useState('');
   const [error, setError] = useState('');
   const [validation, setValidation] = useState<ValidationResult | null>(null);
@@ -139,7 +139,7 @@ export default function Converter() {
                     type="text"
                     value={ipv6Address}
                     onChange={handleInputChange}
-                    placeholder="Enter an IPv6 address (e.g., 2001:db8::1)"
+                    placeholder="Enter an IPv6 address (e.g., 2001:0db8:85a3:0000:0000:8a2e:0370:7334)"
                   />
                 </div>
                 

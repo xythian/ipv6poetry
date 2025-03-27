@@ -15,6 +15,10 @@ async function handleGenerate(outputDir: string): Promise<void> {
   const generator = new WordlistGenerator(outputDir);
   await generator.generateAllCategories();
   
+  // Ensure 'zero' is the first word in the main wordlist
+  const wordlistPath = path.join(outputDir, 'wordlist.txt');
+  await generator.ensureZeroIsFirstWord(wordlistPath);
+  
   console.log(chalk.green('Word lists generated successfully'));
 }
 
@@ -44,6 +48,24 @@ async function handleToIPv6(phrase: string, wordlistDir: string): Promise<void> 
     
     console.log(chalk.blue(`\nPoetic phrase: ${phrase}`));
     console.log(chalk.green(`IPv6: ${ipv6Address}`));
+  } catch (error) {
+    console.error(chalk.red(`Error: ${error instanceof Error ? error.message : String(error)}`));
+    process.exit(1);
+  }
+}
+
+/**
+ * Handle ensure-zero command
+ */
+async function handleEnsureZero(wordlistDir: string): Promise<void> {
+  try {
+    const generator = new WordlistGenerator(wordlistDir);
+    const wordlistPath = path.join(wordlistDir, 'wordlist.txt');
+    
+    console.log(chalk.blue(`Ensuring 'zero' is the first word in ${wordlistPath}...`));
+    await generator.ensureZeroIsFirstWord(wordlistPath);
+    
+    console.log(chalk.green('Wordlist updated successfully'));
   } catch (error) {
     console.error(chalk.red(`Error: ${error instanceof Error ? error.message : String(error)}`));
     process.exit(1);
@@ -92,6 +114,14 @@ async function main(): Promise<void> {
           default: defaultWordlistDir
         });
     })
+    .command('ensure-zero', 'Ensure "zero" is the first word in the wordlist', {
+      'wordlist-dir': {
+        alias: 'w',
+        type: 'string',
+        description: 'Directory containing the wordlist file',
+        default: defaultWordlistDir
+      }
+    })
     .demandCommand(1, 'You need to specify a command')
     .help()
     .alias('help', 'h')
@@ -110,6 +140,9 @@ async function main(): Promise<void> {
       break;
     case 'to-ipv6':
       await handleToIPv6(argv.phrase, argv['wordlist-dir']);
+      break;
+    case 'ensure-zero':
+      await handleEnsureZero(argv['wordlist-dir']);
       break;
     default:
       console.error(chalk.red(`Unknown command: ${command}`));
