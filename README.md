@@ -112,7 +112,7 @@ This project explores the collaboration between human developers and AI assistan
 
 ### Development Process
 
-- Initial concept and requirements were specified by humans
+- Initial concept and requirements were specified by a human
 - Implementation details, algorithms, and code structure were developed collaboratively
 - Claude Code contributed to:
   - Python and JavaScript implementations
@@ -126,6 +126,8 @@ This experiment demonstrates how AI can enhance developer productivity while pre
 
 Working with an AI assistant on this project offered several insights:
 - AI can efficiently implement complex algorithms when given clear requirements
+- It can be helpful to get working code based on the unclear requirements to more rapidly discover where requirements need to be clearer
+- Iteration being fast and code creation being "cheap" (and getting cheaper) likely means a shift in how we approach software development to maximize effectiveness
 - Human oversight remains essential for design decisions and quality assurance
 - The conversation-based approach allowed for iterative refinement
 - AI can handle both high-level architecture and low-level implementation details
