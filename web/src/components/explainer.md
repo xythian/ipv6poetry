@@ -27,9 +27,9 @@ For example, instead of remembering:
 
 You can use the poetic phrase:
 
-`schema deaf samarium zero zero engulf fields osmanli below5`
+`schema deaf samarium zero zero engulf fields osmanli arrives5`
 
-Where "below5" is the checksum word that helps detect transcription errors.
+Where "arrives5" is the checksum word that helps detect transcription errors.
 
 ## Real-World Applications
 
