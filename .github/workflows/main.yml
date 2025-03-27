@@ -30,8 +30,11 @@ jobs:
     - name: Test
       run: bun test
     
-    - name: Build
+    - name: Build JS
       run: bun run build
+      
+    - name: Build TypeScript Declarations
+      run: bun run build:types
 
   test-python:
     runs-on: ubuntu-latest

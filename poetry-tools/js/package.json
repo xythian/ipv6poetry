@@ -5,13 +5,14 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "bun build ./src/index.ts --outdir ./dist --format cjs",
+    "build:types": "tsc --emitDeclarationOnly",
     "dev": "tsc --watch",
-    "test": "jest",
+    "test": "bun test",
     "lint": "eslint src --ext .ts",
-    "generate": "ts-node src/cli.ts generate",
-    "to-poetry": "ts-node src/cli.ts to-poetry",
-    "to-ipv6": "ts-node src/cli.ts to-ipv6"
+    "generate": "bun src/cli.ts generate",
+    "to-poetry": "bun src/cli.ts to-poetry",
+    "to-ipv6": "bun src/cli.ts to-ipv6"
   },
   "keywords": [
     "ipv6",
