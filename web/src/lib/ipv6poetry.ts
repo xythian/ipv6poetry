@@ -39,7 +39,7 @@ export class IPv6PoetryConverter {
   /**
    * Normalize an IPv6 address
    * @param address IPv6 address
-   * @returns Normalized IPv6 address
+   * @returns Normalized IPv6 address according to RFC 5952
    */
   normalizeIPv6(address: string): string {
     // Basic validation
@@ -69,13 +69,61 @@ export class IPv6PoetryConverter {
         throw new Error(`Invalid IPv6 address: wrong number of segments in ${address}`);
       }
       
-      // Expand each segment to 4 digits
-      const expandedSegments = segments.map(segment => {
+      // Convert all segments to lowercase and remove leading zeros
+      const normalizedSegments = segments.map(segment => {
         const num = parseInt(segment, 16);
-        return num.toString(16).padStart(4, '0');
+        return num.toString(16).toLowerCase();
       });
       
-      return expandedSegments.join(':');
+      // Find longest sequence of zeros to compress (RFC 5952)
+      let longestZeroSeq = { start: -1, length: 0 };
+      let currentZeroSeq = { start: -1, length: 0 };
+      
+      for (let i = 0; i < normalizedSegments.length; i++) {
+        if (normalizedSegments[i] === '0') {
+          if (currentZeroSeq.start === -1) {
+            currentZeroSeq.start = i;
+            currentZeroSeq.length = 1;
+          } else {
+            currentZeroSeq.length++;
+          }
+        } else {
+          if (currentZeroSeq.length > longestZeroSeq.length) {
+            longestZeroSeq = { ...currentZeroSeq };
+          }
+          currentZeroSeq.start = -1;
+          currentZeroSeq.length = 0;
+        }
+      }
+      
+      // Check final sequence
+      if (currentZeroSeq.length > longestZeroSeq.length) {
+        longestZeroSeq = { ...currentZeroSeq };
+      }
+      
+      // Apply compression only if sequence is at least 2 zeros (RFC 5952)
+      if (longestZeroSeq.length >= 2) {
+        let result = '';
+        
+        // Add segments before compressed part
+        for (let i = 0; i < longestZeroSeq.start; i++) {
+          result += normalizedSegments[i] + ':';
+        }
+        
+        // Add :: for compressed zeros
+        result += '::';
+        
+        // Add segments after compressed part
+        for (let i = longestZeroSeq.start + longestZeroSeq.length; i < 8; i++) {
+          result += normalizedSegments[i];
+          if (i < 7) result += ':';
+        }
+        
+        return result;
+      }
+      
+      // If no compression, just join with colons
+      return normalizedSegments.join(':');
     } catch (error) {
       throw new Error(`Invalid IPv6 address: ${address} - ${error}`);
     }
@@ -130,11 +178,32 @@ export class IPv6PoetryConverter {
     // Normalize the address
     const normalized = this.normalizeIPv6(ipv6Address);
     
-    // Split into segments
-    const segments = normalized.split(':');
+    // Parse normalized address - handling :: notation properly
+    let segments: string[] = [];
+    
+    if (normalized.includes('::')) {
+      const parts = normalized.split('::');
+      const leftParts = parts[0] ? parts[0].split(':') : [];
+      const rightParts = parts[1] ? parts[1].split(':') : [];
+      
+      // Calculate how many zeroes in the middle
+      const missing = 8 - leftParts.length - rightParts.length;
+      segments = [...leftParts, ...Array(missing).fill('0'), ...rightParts];
+    } else {
+      segments = normalized.split(':');
+    }
+    
+    // Ensure we have 8 segments
+    if (segments.length !== 8) {
+      throw new Error(`Invalid IPv6 address: wrong number of segments after normalization in ${normalized}`);
+    }
     
     // Convert each segment to decimal
-    const decimalValues = segments.map(segment => parseInt(segment, 16));
+    const decimalValues = segments.map(segment => {
+      // Handle empty string segments that might result from :: notation
+      const segmentStr = segment || '0';
+      return parseInt(segmentStr, 16);
+    });
     
     // Map each decimal value to a word
     const words = decimalValues.map(value => {
