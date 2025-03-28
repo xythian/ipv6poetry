@@ -131,5 +131,6 @@ Working with an AI assistant on this project offered several insights:
 - Human oversight remains essential for design decisions and quality assurance
 - The conversation-based approach allowed for iterative refinement
 - AI can handle both high-level architecture and low-level implementation details
+- Human oversight is necessary to keep the AI on track and prevent pathological regressions like hard-coding examples to produce expected results rather than properly implementing normalization code (for example).
 
 We welcome feedback on both the IPv6 Poetry concept itself and the hybrid AI/human development approach.
