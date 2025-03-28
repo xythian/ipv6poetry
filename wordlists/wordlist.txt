@@ -1,4 +1,16 @@
 zero
+one
+two
+three
+four
+five
+six
+seven
+eight
+nine
+ten
+eleven
+twelve
 and
 was
 for
@@ -8,10 +20,8 @@ not
 are
 but
 have
-one
 you
 were
-her
 all
 she
 there
@@ -34,7 +44,6 @@ some
 could
 time
 these
-two
 may
 any
 now
@@ -87,7 +96,6 @@ against
 came
 used
 take
-three
 states
 few
 house
@@ -161,7 +169,6 @@ early
 white
 case
 large
-four
 need
 big
 become
@@ -199,7 +206,6 @@ name
 example
 action
 local
-five
 gave
 today
 either
@@ -266,7 +272,6 @@ center
 woman
 common
 policy
-six
 clear
 provide
 feel
@@ -377,7 +382,6 @@ defense
 actually
 son
 river
-ten
 received
 doing
 medical
@@ -552,7 +556,6 @@ gives
 hit
 plane
 quality
-seven
 choice
 poor
 function
@@ -770,7 +773,6 @@ poems
 agreed
 event
 forced
-nine
 lives
 file
 provides
@@ -1305,7 +1307,6 @@ hoped
 royal
 limit
 operate
-twelve
 guard
 tired
 screen
@@ -1563,7 +1564,6 @@ discover
 painted
 intense
 tool
-eleven
 shouted
 focus
 finger

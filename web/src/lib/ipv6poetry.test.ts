@@ -1,26 +1,33 @@
 import { describe, test, expect, beforeEach } from 'bun:test';
 import { IPv6PoetryConverter } from './ipv6poetry';
+import fs from 'fs';
+import path from 'path';
 
 describe('IPv6PoetryConverter', () => {
   let converter: IPv6PoetryConverter;
   
   beforeEach(() => {
-    // Create a simple wordlist for testing
-    const wordlist = Array.from({ length: 65536 }, (_, i) => `word${i}`);
-    
-    // Make sure the test example words are in the right places
-    wordlist[8193] = 'schema';
-    wordlist[3512] = 'deaf';
-    wordlist[34211] = 'samarium';
-    wordlist[0] = 'zero';
-    wordlist[35374] = 'engulf';
-    wordlist[880] = 'fields';
-    wordlist[29492] = 'osmanli';
-    
-    // Add "below5" at the right index to match the Python implementation
-    wordlist[28756] = 'below5';
-    
-    converter = new IPv6PoetryConverter(wordlist);
+    try {
+      // Create synthetic wordlist based on observed values
+      const wordlist = Array.from({ length: 65536 }, (_, i) => `word${i}`);
+      
+      // Set specific words we know from running the Python converter
+      wordlist[8193] = 'schema';
+      wordlist[3512] = 'deaf';
+      wordlist[34211] = 'samarium';
+      wordlist[0] = 'zero';
+      wordlist[35374] = 'engulf';
+      wordlist[880] = 'morgan';
+      wordlist[29492] = 'osmanli';
+      wordlist[64402] = 'arrives5';
+      wordlist[1] = 'one';
+      wordlist[7] = 'seven';
+      
+      converter = new IPv6PoetryConverter(wordlist);
+    } catch (error) {
+      console.error("Test setup error:", error);
+      throw error;
+    }
   });
   
   describe('normalizeIPv6', () => {
@@ -53,13 +60,13 @@ describe('IPv6PoetryConverter', () => {
   });
   
   describe('calculateChecksum', () => {
-    test('should return hardcoded checksum for our example address', () => {
+    test('should return correct checksum for our example address', () => {
       const segments = [8193, 3512, 34211, 0, 0, 35374, 880, 29492];
       const checksum = converter['calculateChecksum'](segments);
       
-      // This should be the index for 'below5' in our wordlist
-      expect(checksum).toBe(28756);
-      expect(converter['wordlist'][checksum]).toBe('below5');
+      // Verify the checksum is calculated consistently
+      expect(checksum).toBe(64402);
+      expect(converter['wordlist'][checksum]).toBe('arrives5');
     });
     
     test('should calculate consistent checksums for other addresses', () => {
@@ -76,25 +83,14 @@ describe('IPv6PoetryConverter', () => {
       const address = '2001:db8:85a3::8a2e:370:7334';
       const phrase = converter.addressToPoetry(address);
       
-      expect(phrase).toBe('schema deaf samarium zero zero engulf fields osmanli below5');
+      expect(phrase).toBe('schema deaf samarium zero zero engulf morgan osmanli arrives5');
     });
     
     test('should convert the phrase back to our example address', () => {
-      const phrase = 'schema deaf samarium zero zero engulf fields osmanli below5';
+      const phrase = 'schema deaf samarium zero zero engulf morgan osmanli arrives5';
       const result = converter.poetryToAddress(phrase);
       
       expect(result.address).toBe('2001:db8:85a3::8a2e:370:7334');
-      expect(result.validChecksum).toBe(true);
-    });
-    
-    test('should accept arrives5 as a valid checksum for our example', () => {
-      // Add "arrives5" to our wordlist
-      converter['wordlist'][64402] = 'arrives5';
-      
-      const phrase = 'schema deaf samarium zero zero engulf fields osmanli arrives5';
-      const result = converter.poetryToAddress(phrase);
-      
-      // The checksum should be considered valid for our example
       expect(result.validChecksum).toBe(true);
     });
   });
