@@ -162,18 +162,6 @@ export class IPv6PoetryConverter {
    * @returns Index for the checksum word
    */
   calculateChecksum(decimalValues: number[]): number {
-    // Known IPv6 addresses that have specific checksum values
-    // This handles discrepancies between JavaScript and Python CRC32 implementations
-    const knownChecksums: {[key: string]: number} = {
-      // Our example address - maps to "below5"
-      "2001:db8:85a3::8a2e:370:7334": 28756
-    };
-    
-    // Check if this is a known address with a predetermined checksum index
-    const addressKey = this.isKnownAddress(decimalValues);
-    if (addressKey && knownChecksums[addressKey]) {
-      return knownChecksums[addressKey];
-    }
     
     // Implementation of zlib.crc32 in JavaScript
     // Adapted from pako.js CRC32 implementation to match Python's zlib.crc32
@@ -210,27 +198,6 @@ export class IPv6PoetryConverter {
     return crc & 0xFFFF;
   }
   
-  /**
-   * Check if the decimal values match a known IPv6 address
-   * @param decimalValues Array of decimal values for each segment
-   * @returns The key of the known address or null if not found
-   */
-  private isKnownAddress(decimalValues: number[]): string | null {
-    // Example address: 2001:db8:85a3::8a2e:370:7334
-    if (decimalValues.length === 8 &&
-        decimalValues[0] === 8193 && // 2001
-        decimalValues[1] === 3512 && // db8
-        decimalValues[2] === 34211 && // 85a3
-        decimalValues[3] === 0 && 
-        decimalValues[4] === 0 &&
-        decimalValues[5] === 35374 && // 8a2e
-        decimalValues[6] === 880 && // 370
-        decimalValues[7] === 29492) { // 7334
-      return "2001:db8:85a3::8a2e:370:7334";
-    }
-    
-    return null;
-  }
   
   /**
    * Convert an IPv6 address to a poetic phrase
@@ -315,21 +282,13 @@ export class IPv6PoetryConverter {
       if (this.includeChecksum && words.length >= 9) {
         const checksumWord = words[8];
         
-        // For the example phrase (the one in the docs), allow both below5 and arrives5
-        // This handles the discrepancy between normalization on JavaScript and Python sides
-        const isExamplePhrase = words.join(' ').startsWith("schema deaf samarium zero zero engulf fields osmanli");
-        const isExampleWithArrivesChecksum = isExamplePhrase && checksumWord === "arrives5";
-        
         let expectedChecksumIdx = this.calculateChecksum(decimalValues);
         const expectedWord = this.wordlist[expectedChecksumIdx % this.wordlist.length];
         
         expectedChecksum = expectedWord;
         actualChecksum = checksumWord;
         
-        // If it's our example with the arrives5 checksum, accept it anyway
-        if (isExampleWithArrivesChecksum) {
-          validChecksum = true;
-        } else if (checksumWord !== expectedWord) {
+        if (checksumWord !== expectedWord) {
           validChecksum = false;
           
           // Check if the checksum word is even in the wordlist

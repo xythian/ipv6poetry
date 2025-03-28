@@ -39,14 +39,8 @@ export default function Converter() {
         // Initialize with an example conversion
         if (direction === 'to-poetry') {
           try {
-            // For the default example, use a hardcoded string to ensure consistency
-            if (ipv6Address === "2001:db8:85a3::8a2e:370:7334") {
-              // Using the consistent example from docs
-              setPoeticPhrase("schema deaf samarium zero zero engulf fields osmanli below5");
-            } else {
-              const phrase = newConverter.addressToPoetry(ipv6Address);
-              setPoeticPhrase(phrase);
-            }
+            const phrase = newConverter.addressToPoetry(ipv6Address);
+            setPoeticPhrase(phrase);
           } catch (e) {
             console.error("Failed to convert initial address:", e);
             setError("Failed to convert the example address. Please try a different address.");
@@ -71,13 +65,8 @@ export default function Converter() {
     
     try {
       if (direction === 'to-poetry') {
-        // Special handling for the example address to ensure consistent output
-        if (ipv6Address === "2001:db8:85a3::8a2e:370:7334") {
-          setPoeticPhrase("schema deaf samarium zero zero engulf fields osmanli below5");
-        } else {
-          const phrase = converter.addressToPoetry(ipv6Address);
-          setPoeticPhrase(phrase);
-        }
+        const phrase = converter.addressToPoetry(ipv6Address);
+        setPoeticPhrase(phrase);
       } else { // to-ipv6
         const result = converter.poetryToAddress(poeticPhrase);
         setIpv6Address(result.address);
